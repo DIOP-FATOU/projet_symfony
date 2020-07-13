@@ -4,9 +4,12 @@ namespace App\Entity;
 
 use App\Repository\EtudiantRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
+
 
 /**
  * @ORM\Entity(repositoryClass=EtudiantRepository::class)
+ *
  */
 class Etudiant
 {
@@ -33,11 +36,13 @@ class Etudiant
     private $prenom;
 
     /**
+     * @Assert\Regex("/^7[7|8|6|0][0-9]{7}$/")
      * @ORM\Column(type="string", length=255)
      */
     private $telephone;
 
     /**
+     * @Assert\Regex("/^[_a-zA-Z0-9-]+(\.[_a-zA-Z0-9-]+)*@([a-zA-Z0-9-]+\.)+[a-zA-Z]{2,4}$/")
      * @ORM\Column(type="string", length=255)
      */
     private $email;
@@ -46,6 +51,11 @@ class Etudiant
      * @ORM\Column(type="string", length=255)
      */
     private $date_naissance;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=Chambre::class, inversedBy="etudiants")
+     */
+    private $chambre;
 
     public function getId(): ?int
     {
@@ -120,6 +130,18 @@ class Etudiant
     public function setDateNaissance(string $date_naissance): self
     {
         $this->date_naissance = $date_naissance;
+
+        return $this;
+    }
+
+    public function getChambre(): ?Chambre
+    {
+        return $this->chambre;
+    }
+
+    public function setChambre(?Chambre $chambre): self
+    {
+        $this->chambre = $chambre;
 
         return $this;
     }
